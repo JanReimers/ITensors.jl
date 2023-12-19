@@ -34,7 +34,7 @@ NDTensorsOctavianExt = "Octavian"
 NDTensorsTBLISExt = "TBLIS"
 
 [compat]
-Adapt = "3.5"
+Adapt = "3.5, 4"
 Compat = "4.9"
 Dictionaries = "0.3.5"
 FLoops = "0.2.1"
