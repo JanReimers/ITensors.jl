@@ -113,9 +113,9 @@ function contract!(
   A::DiagTensor{ElA,NA},
   Alabels,
   B::DenseTensor{ElB,NB},
-  Blabels,
+  Blabels;
   α::Number=one(ElC),
-  β::Number=zero(ElC);
+  β::Number=zero(ElC),
   convert_to_dense::Bool=true,
 ) where {ElA,NA,ElB,NB,ElC,NC}
   #@timeit_debug timer "diag-dense contract!" begin

@@ -552,7 +552,7 @@ function _number_uncombined_shift(blockval::Integer, blockcomb::Vector)
     return 0
   end
   ncomb_shift = 0
-  for i in 1:(blockval - 1)
+  for i in 1:(blockval-1)
     ncomb_shift += findfirst(==(i + 1), blockcomb) - findfirst(==(i), blockcomb) - 1
   end
   return ncomb_shift
@@ -571,7 +571,7 @@ function uncombine_blocks(blocks::Blocks{N}, dim::Int, blockcomb::Vector{Int}) w
     ncomb = _number_uncombined(blockval, blockcomb)
     ncomb_shift = _number_uncombined_shift(blockval, blockcomb)
     push!(blocks_uncomb, setindex(block, blockval + ncomb_shift, dim))
-    for j in 1:(ncomb - 1)
+    for j in 1:(ncomb-1)
       push!(blocks_uncomb, setindex(block, blockval + ncomb_shift + j, dim))
     end
   end
@@ -585,7 +585,7 @@ function uncombine_block(block::Block{N}, dim::Int, blockcomb::Vector{Int}) wher
   ncomb = _number_uncombined(blockval, blockcomb)
   ncomb_shift = _number_uncombined_shift(blockval, blockcomb)
   push!(blocks_uncomb, setindex(block, blockval + ncomb_shift, dim))
-  for j in 1:(ncomb - 1)
+  for j in 1:(ncomb-1)
     push!(blocks_uncomb, setindex(block, blockval + ncomb_shift + j, dim))
   end
   return blocks_uncomb
@@ -698,7 +698,7 @@ end
 function permutedims!!(
   R::BlockSparseTensor{ElR,N},
   T::BlockSparseTensor{ElT,N},
-  perm::NTuple{N,Int},
+  perm::NTuple{N,Int};
   f::Function=(r, t) -> t,
 ) where {ElR,ElT,N}
   RR = convert(promote_type(typeof(R), typeof(T)), R)
@@ -711,7 +711,7 @@ scale_blocks!(T, compute_fac::Function=(b) -> 1) = T
 
 # <fermions>
 function scale_blocks!(
-  T::BlockSparseTensor{<:Number,N}, compute_fac::Function=(b) -> 1
+  T::BlockSparseTensor{<:Number,N}; compute_fac::Function=(b) -> 1
 ) where {N}
   for blockT in keys(blockoffsets(T))
     fac = compute_fac(blockT)
@@ -730,7 +730,7 @@ using .TypeParameterAccessors: set_type_parameters, parenttype
 function permutedims!(
   R::BlockSparseTensor{<:Number,N},
   T::BlockSparseTensor{<:Number,N},
-  perm::NTuple{N,Int},
+  perm::NTuple{N,Int};
   f::Function=(r, t) -> t,
 ) where {N}
   blocks_R = keys(blockoffsets(R))

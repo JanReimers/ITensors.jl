@@ -168,7 +168,7 @@ function subblocks(axes::Tuple, subaxes::Tuple, block::Block)
   @assert length(axes) == length(subaxes)
   return BlockRange(
     ntuple(length(axes)) do dim
-      findblocks(subaxes[dim], axes[dim][Tuple(block)[dim]])
+      return findblocks(subaxes[dim], axes[dim][Tuple(block)[dim]])
     end,
   )
 end

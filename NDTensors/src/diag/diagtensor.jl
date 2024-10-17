@@ -141,7 +141,7 @@ denseblocks(T::DiagTensor) = dense(T)
 function permutedims!(
   R::DiagTensor{<:Number,N},
   T::DiagTensor{<:Number,N},
-  perm::NTuple{N,Int},
+  perm::NTuple{N,Int};
   f::Function=(r, t) -> t,
 ) where {N}
   # TODO: check that inds(R)==permute(inds(T),perm)?
@@ -152,7 +152,7 @@ function permutedims!(
 end
 
 function permutedims(
-  T::DiagTensor{<:Number,N}, perm::NTuple{N,Int}, f::Function=identity
+  T::DiagTensor{<:Number,N}, perm::NTuple{N,Int}; f::Function=identity
 ) where {N}
   R = NDTensors.similar(T, permute(inds(T), perm))
   g(r, t) = f(t)
@@ -161,7 +161,7 @@ function permutedims(
 end
 
 function permutedims(
-  T::UniformDiagTensor{<:Number,N}, perm::NTuple{N,Int}, f::Function=identity
+  T::UniformDiagTensor{<:Number,N}, perm::NTuple{N,Int}; f::Function=identity
 ) where {N}
   R = tensor(Diag(f(getdiagindex(T, 1))), permute(inds(T), perm))
   return R
@@ -171,7 +171,7 @@ end
 function permutedims!!(
   R::NonuniformDiagTensor{<:Number,N},
   T::NonuniformDiagTensor{<:Number,N},
-  perm::NTuple{N,Int},
+  perm::NTuple{N,Int};
   f::Function=(r, t) -> t,
 ) where {N}
   R = convert(promote_type(typeof(R), typeof(T)), R)
@@ -182,7 +182,7 @@ end
 function permutedims!!(
   R::UniformDiagTensor{ElR,N},
   T::UniformDiagTensor{ElT,N},
-  perm::NTuple{N,Int},
+  perm::NTuple{N,Int};
   f::Function=(r, t) -> t,
 ) where {ElR,ElT,N}
   R = convert(promote_type(typeof(R), typeof(T)), R)
@@ -191,7 +191,7 @@ function permutedims!!(
 end
 
 function permutedims!(
-  R::DenseTensor{ElR,N}, T::DiagTensor{ElT,N}, perm::NTuple{N,Int}, f::Function=(r, t) -> t
+  R::DenseTensor{ElR,N}, T::DiagTensor{ElT,N}, perm::NTuple{N,Int}; f::Function=(r, t) -> t
 ) where {ElR,ElT,N}
   for i in 1:diaglength(T)
     @inbounds setdiagindex!(R, f(getdiagindex(R, i), getdiagindex(T, i)), i)
@@ -200,7 +200,7 @@ function permutedims!(
 end
 
 function permutedims!!(
-  R::DenseTensor{ElR,N}, T::DiagTensor{ElT,N}, perm::NTuple{N,Int}, f::Function=(r, t) -> t
+  R::DenseTensor{ElR,N}, T::DiagTensor{ElT,N}, perm::NTuple{N,Int}; f::Function=(r, t) -> t
 ) where {ElR,ElT,N}
   RR = convert(promote_type(typeof(R), typeof(T)), R)
   permutedims!(RR, T, perm, f)
@@ -211,7 +211,7 @@ end
 # the same as the version with the input types
 # swapped.
 function permutedims!!(
-  R::DiagTensor{ElR,N}, T::DenseTensor{ElT,N}, perm::NTuple{N,Int}, f::Function=(r, t) -> t
+  R::DiagTensor{ElR,N}, T::DenseTensor{ElT,N}, perm::NTuple{N,Int}; f::Function=(r, t) -> t
 ) where {ElR,ElT,N}
   RR = convert(promote_type(typeof(R), typeof(T)), R)
   permutedims!(RR, T, perm, f)
